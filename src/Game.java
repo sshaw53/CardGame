@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 public class Game {
     // INSTANCE VARIABLES
@@ -35,6 +36,8 @@ public class Game {
         String name2 = s.nextLine();
 
         Game game = new Game(name1, name2);
+
+        game.playGame();
     }
 
     // METHODS
@@ -46,31 +49,62 @@ public class Game {
     }
 
     public void playGame() {
-        // Pick a card from each hand
-        Card card1 = player1.getCard();
-        Card card2 = player2.getCard();
-
         while (!(player1.isHandEmpty() || player2.isHandEmpty())) {
-            // Compare the hand
-            // If player 1's hand is bigger than player 2's, player 1 gets both cards
-            if (card1.getPoint() > card2.getPoint()) {
-                player1.addCard(card1);
-                player1.addCard(card2);
-            }
-            // Vice versa
-            else if (card2.getPoint() > card1.getPoint()) {
-                player2.addCard(card1);
-                player2.addCard(card2);
-            }
-            // Tie case: then play another card and winner gets that card + 3 other cards from the other hand
-            else {
+            // Pick a card from each hand
+            Card card1 = player1.getCard();
+            Card card2 = player2.getCard();
+            // instantiate the arraylist
+            // add the two new cards to the arraylist of available cards
 
+
+            System.out.print("Player 1 dealt a: " + card1);
+            System.out.print("Player 2 dealt a: " + card2);
+
+            //compareCards(card1, card2);
+            // tie case - if compareCards() returns 0, draw new cards, compare, and give the tie cards + new cards to winner
+            while (compareCards(card1, card2) == 0) {
+                Card newCard1 = player1.getCard();
+                Card newCard2 = player2.getCard();
+                compareCards(newCard1, newCard2);
             }
-            // if a player's hand is empty, then the other player wins
+        }
+        // If a player's hand is empty, then the other player wins
+        if (player1.isHandEmpty()) {
+            System.out.println("Player 1 has ran out of cards, Player 2 wins!");
+        }
+        else {
+            System.out.println("Player 2 has ran out of cards, Player 1 wins!");
         }
     }
 
-//    public int compareCards(Card card1, Card card2) {
-//
-//    }
+    public int compareCards(Card card1, Card card2) {
+        // Compare the hand
+        // If player 1's hand is bigger than player 2's, player 1 gets both cards
+        if (card1.getPoint() > card2.getPoint()) {
+            player1.addCard(card1);
+            player1.addCard(card2);
+            // add all cards FROM arraylist TO player1
+
+            System.out.println("Player 1 Wins this turn, the " + card1 + " and the " + card2 + " are added to Player 1's hand.");
+            return 1;
+        }
+        // Vice versa
+        else if (card2.getPoint() > card1.getPoint()) {
+            player2.addCard(card1);
+            player2.addCard(card2);
+            // add all cards FROM arraylist TO player2
+
+            System.out.println("Player 2 Wins this turn, the " + card1 + " and the " + card2 + " are added to Player 2's hand.");
+            return 2;
+        }
+        // Tie case, returns 1
+        else {
+            tieHand.add(card1);
+            tieHand.add(card2);
+            // add these two cards TO the arraylist
+
+            System.out.println("There's a tie! Another card will be dealt to determine who gets the tie cards and the new cards dealt.");
+            return 0;
+        }
+    }
 }

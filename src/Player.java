@@ -30,7 +30,7 @@ public class Player {
         return points;
     }
 
-    public boolean isEmpty() {
+    public boolean isHandEmpty() {
         return hand.isEmpty();
     }
 
