@@ -41,11 +41,11 @@ public class Deck {
     // Shuffles the deck
     public void shuffle() {
         // Reorder
-        for (int i = cards.size() - 1; i >= 0; i--) {
+        for (int i = cards.size() - 1; i > 0; i--) {
             int switchIdx = (int) (Math.random() * i + 1);
-            Card cardCopy = cards.remove(switchIdx);
-            cards.add(switchIdx, cards.remove(i));
-            cards.add(i, cardCopy);
+            Card cardCopy = cards.get(i - 1);
+            cardCopy = cards.set(switchIdx, cardCopy);
+            cards.set(i, cardCopy);
         }
         // Set cardsLeft back to num of cards in deck
         cardsLeft = cards.size();

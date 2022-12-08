@@ -9,9 +9,11 @@ public class Player {
     public Player(String name) {
         this.name = name;
         this.points = 0;
+        hand = new ArrayList<Card>();
     }
 
     public Player(String name, ArrayList<Card> hand) {
+        hand = new ArrayList<Card>();
         this.name = name;
         this.hand = hand;
         this.points = 0;

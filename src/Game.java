@@ -19,7 +19,7 @@ public class Game {
         player2 = new Player(name2);
 
         // for half the deck, add a card to the player's hand
-        for (int i = 0; i < 52; i++) {
+        for (int i = 0; i < 26; i++) {
             player1.addCard(deck.deal());
             player2.addCard(deck.deal());
         }
@@ -43,30 +43,36 @@ public class Game {
     // METHODS
     public static void printInstructions() {
         System.out.println("Hello! Welcome to the War card game! This game requires two players. You will " +
-                            "each be dealt half of a deck, and will be playing unknown cards to see which one " +
+                            "each be dealt half of a deck, and will be playing unknown cards to see \nwhich one " +
                             "is larger. The order in power goes 2 at the least, and Ace at the top. The game " +
-                            "will continue until one player has no cards in their hand left. Good luck!");
+                            "will continue until one player has no cards in their hand left. \nGood luck!");
     }
 
     public void playGame() {
+        Scanner s = new Scanner(System.in);
         while (!(player1.isHandEmpty() || player2.isHandEmpty())) {
             // Pick a card from each hand
             Card card1 = player1.getCard();
             Card card2 = player2.getCard();
-            // instantiate the arraylist
-            // add the two new cards to the arraylist of available cards
+            ArrayList<Card> cardPile = new ArrayList<Card>();
+            // Add the two new cards to the arraylist of available cards
+            cardPile.add(card1);
+            cardPile.add(card2);
 
 
-            System.out.print("Player 1 dealt a: " + card1);
-            System.out.print("Player 2 dealt a: " + card2);
+            System.out.println("Player 1 dealt a: " + card1);
+            System.out.println("Player 2 dealt a: " + card2);
 
-            //compareCards(card1, card2);
-            // tie case - if compareCards() returns 0, draw new cards, compare, and give the tie cards + new cards to winner
-            while (compareCards(card1, card2) == 0) {
+            s.nextLine();
+
+            // Tie case - if compareCards() returns 0, draw new cards, compare, and give the tie cards + new cards to winner
+            while (compareCards(card1, card2, cardPile) == 1) {
                 Card newCard1 = player1.getCard();
                 Card newCard2 = player2.getCard();
-                compareCards(newCard1, newCard2);
+                compareCards(newCard1, newCard2, cardPile);
             }
+
+            s.nextLine();
         }
         // If a player's hand is empty, then the other player wins
         if (player1.isHandEmpty()) {
@@ -77,34 +83,33 @@ public class Game {
         }
     }
 
-    public int compareCards(Card card1, Card card2) {
+    public int compareCards(Card card1, Card card2, ArrayList<Card> cardPile) {
         // Compare the hand
         // If player 1's hand is bigger than player 2's, player 1 gets both cards
+        // Add all cards FROM arraylist TO player1
         if (card1.getPoint() > card2.getPoint()) {
-            player1.addCard(card1);
-            player1.addCard(card2);
-            // add all cards FROM arraylist TO player1
-
+            for (int i = 0; i < cardPile.size(); i++) {
+                player1.addCard(cardPile.get(i));
+            }
             System.out.println("Player 1 Wins this turn, the " + card1 + " and the " + card2 + " are added to Player 1's hand.");
-            return 1;
+            return 0;
         }
         // Vice versa
+        // Add all cards FROM arraylist TO player2
         else if (card2.getPoint() > card1.getPoint()) {
-            player2.addCard(card1);
-            player2.addCard(card2);
-            // add all cards FROM arraylist TO player2
-
+            for (int i = 0; i < cardPile.size(); i++) {
+                player2.addCard(cardPile.get(i));
+            }
             System.out.println("Player 2 Wins this turn, the " + card1 + " and the " + card2 + " are added to Player 2's hand.");
-            return 2;
+            return 0;
         }
         // Tie case, returns 1
         else {
-            tieHand.add(card1);
-            tieHand.add(card2);
-            // add these two cards TO the arraylist
-
+            // Add these two cards TO the arraylist
+            cardPile.add(card1);
+            cardPile.add(card1);
             System.out.println("There's a tie! Another card will be dealt to determine who gets the tie cards and the new cards dealt.");
-            return 0;
+            return 1;
         }
     }
 }
