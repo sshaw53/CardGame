@@ -67,11 +67,14 @@ public class Game {
 
             // Tie case - if compareCards() returns 0, draw new cards, compare, and give the tie cards + new cards to winner
             while (compareCards(card1, card2, cardPile) == 1) {
-                Card newCard1 = player1.getCard();
-                Card newCard2 = player2.getCard();
-                compareCards(newCard1, newCard2, cardPile);
+                s.nextLine();
+                card1 = player1.getCard();
+                card2 = player2.getCard();
+                cardPile.add(card1);
+                cardPile.add(card2);
+                System.out.println("Player 1 dealt a: " + card1);
+                System.out.println("Player 2 dealt a: " + card2);
             }
-
             s.nextLine();
         }
         // If a player's hand is empty, then the other player wins
